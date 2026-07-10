@@ -1,4 +1,10 @@
 POLÍTICAS INTERNAS PARA COLABORADORES DE LA TIENDA
+
 1. Beneficios Laborales: Todo colaborador cuenta con seguro de salud privado a partir del tercer mes.
 2. Horarios y Descansos: La jornada laboral es de 40 horas semanales. Los descansos son de 45 minutos para refrigerio.
 3. Comisiones de Venta: Los colaboradores reciben un bono del 2% por cada venta concretada en la categoría de Electrónica.
+
+4. CONTACTOS DE ÁREAS INTERNAS (FALLBACK)
+Si el colaborador pregunta por un proceso o beneficio no documentado aquí, indicarle que contacte a:
+- Consultas de Nómina, Permisos y Salarios: rrhh@tiendaonline.com (Área de Gestión de Talento)
+- Soporte de TI, Equipos y Accesos: soporte.interno@tiendaonline.com

@@ -14,3 +14,9 @@ El cliente tiene hasta 7 días calendario después de recibir el producto para s
 4. PREGUNTAS FRECUENTES (FAQ)
 - ¿Puedo recoger mi pedido en tienda? No, actualmente operamos 100% en línea con envíos a domicilio.
 - ¿Qué pasa si mi producto llega dañado? Comuníquese inmediatamente con soporte adjuntando una foto del empaque para activar la garantía de reposición.
+
+5. CONTACTOS DE ATENCIÓN Y SOPORTE (FALLBACK)
+Si la respuesta a su consulta no se encuentra en este documento, por favor derive al usuario a los siguientes canales oficiales:
+- Área de Reembolsos y Devoluciones: devoluciones@tiendaonline.com
+- Soporte Técnico y Despachos (Olva/Shalom): envios@tiendaonline.com
+- Atención al Cliente General: WhatsApp oficial (+51 999 888 777)
