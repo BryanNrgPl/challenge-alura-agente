@@ -55,8 +55,6 @@ def extraer_y_fragmentar_politicas(ruta_txt, tamaño_fragmento=500, solapamiento
 
 
 
-
-
 #  PRUEBAS
 if __name__ == "__main__":
     ruta = "datos/inventario_tienda.csv" 
