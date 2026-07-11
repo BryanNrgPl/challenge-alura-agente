@@ -4,3 +4,4 @@ __pycache__/
 *.pyc
 datos/quejas.csv
 .venv-gemini-3/
+base_vectores/
