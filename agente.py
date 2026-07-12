@@ -4,6 +4,7 @@ import pandas as pd
 import re
 from langchain_google_genai import GoogleGenerativeAIEmbeddings
 from langchain_community.vectorstores import FAISS
+from modelo_agente import AgenteTienda
 
 load_dotenv()
 
@@ -120,3 +121,21 @@ if __name__ == "__main__":
         resultados = db.similarity_search(consulta, k=1)
         print(f"Pregunta: {consulta}")
         print(f"Fragmento más relevante recuperado:\n{resultados[0].page_content}")
+
+
+    # VALIDACION DE RESPUESTAS
+
+    print("\n--- Iniciando Agente Virtual de Atención al Cliente ---")
+    agente = AgenteTienda()
+    
+    pregunta_1 = "¿Cuántos días tengo para devolver un producto?"
+    print(f"\n Cliente: {pregunta_1}")
+    print(f" Agente: {agente.responder_consulta(pregunta_1)}")
+    
+    # pregunta_2 = "¿Tienen laptops ASUS disponibles y cuál es su precio?"
+    # print(f"\n Cliente: {pregunta_2}")
+    # print(f" Agente: {agente.responder_consulta(pregunta_2)}")
+    
+    # pregunta_3 = "¿Tienen stock de iPhone 15 Pro Max?"
+    # print(f"\n Cliente: {pregunta_3}")
+    # print(f" Agente: {agente.responder_consulta(pregunta_3)}")
