@@ -2,6 +2,7 @@
 __pycache__/
 .venv*/
 *.pyc
-datos/quejas.csv
 .venv-gemini-3/
 base_vectores/
+ejecucion
+ejecucion.log

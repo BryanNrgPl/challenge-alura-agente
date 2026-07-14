@@ -19,11 +19,19 @@ load_dotenv()
 
 if not os.path.exists("base_vectores") and not os.path.exists("base_vectors"):
     ruta_csv = "datos/inventario_tienda.csv"
-    ruta_txt = "datos/politicas_tienda.txt"
+    ruta_tienda_txt = "datos/politicas_tienda.txt"
+    ruta_colaboradores_txt = "datos/politicas_colaboradores.txt"
     with st.spinner("Inicializando base de conocimientos en el servidor."):
+        # Cargar inventario
         productos_limpios = extraer_inventario(ruta_csv) if os.path.exists(ruta_csv) else[]
-        fragmentos_politicas = extraer_y_fragmentar_politicas(ruta_txt) if os.path.exists(ruta_txt) else[]
-        crear_base_conocimiento(productos_limpios, fragmentos_politicas)
+        # Cargar y fragmentar politicas tienda
+        fragmentos_tienda = extraer_y_fragmentar_politicas(ruta_tienda_txt) if os.path.exists(ruta_tienda_txt) else[]
+        # Cargar y fragmentar politicas colabordores
+        fragmentos_colaboradores = extraer_y_fragmentar_politicas(ruta_colaboradores_txt) if os.path.exists(ruta_colaboradores_txt) else []
+        # Unir fragmentos
+        fragmentos_politicas_totales = fragmentos_tienda + fragmentos_colaboradores
+        # Base de conocimiento con todo indexado
+        crear_base_conocimiento(productos_limpios, fragmentos_politicas_totales)
 
 # Inicializar el agente en la sesión de Streamlit
 if "agente" not in st.session_state:
@@ -37,7 +45,7 @@ if "mensajes" not in st.session_state:
     st.session_state.mensajes = [
         {
             "role": "assistant", 
-            "content": "Hola! Soy tu asistente de atención al cliente. ¿En qué puedo ayudarte hoy respecto a nuestro catálogo de productos o políticas de la tienda?",
+            "content": "¡Hola! Soy tu asistente de atención híbrida. ¿En qué puedo ayudarte hoy respecto a nuestro catálogo de productos, políticas de la tienda o dudas de colaboradores?",
             "fuentes": []
         }
     ]
