@@ -4,5 +4,8 @@ __pycache__/
 *.pyc
 .venv-gemini-3/
 base_vectores/
+base_vectors/
 ejecucion
 ejecucion.log
+*.faiss
+*.pkl
