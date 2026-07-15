@@ -45,7 +45,7 @@ if "mensajes" not in st.session_state:
     st.session_state.mensajes = [
         {
             "role": "assistant", 
-            "content": "¡Hola! Soy tu asistente de atención híbrida. ¿En qué puedo ayudarte hoy respecto a nuestro catálogo de productos, políticas de la tienda o dudas de colaboradores?",
+            "content": "¡Hola! Soy un asistente virtual de IA diseñado para ayudarte en nuestro canal de atención. ¿En qué puedo ayudarte hoy respecto a nuestro catálogo de productos, políticas de la tienda o dudas de colaboradores?",
             "fuentes": []
         }
     ]
@@ -69,7 +69,7 @@ with st.sidebar:
 
 # Diseño de la interfaz
 st.title("Asistente Virtual de Atención al Cliente")
-st.caption("Challenge Alura - Sistema RAG con Trazabilidad Completa e Interfaz")
+st.caption("Challenge Alura - Sistema de IA basado en RAG con Trazabilidad Completa")
 
 st.divider()
 
