@@ -2,6 +2,8 @@ import os
 from langchain_google_genai import GoogleGenerativeAIEmbeddings, ChatGoogleGenerativeAI
 from langchain_community.vectorstores import FAISS
 import logging
+from langchain_groq import ChatGroq
+from langchain_core.prompts import ChatPromptTemplate
 
 # CONFIGURACIÓN DE RUTA ABSOLUTA PARA LOGS
 RUTA_ABSOLUTA_LOG = os.path.join(os.path.dirname(os.path.abspath(__file__)), "ejecucion.log")
@@ -10,7 +12,7 @@ RUTA_ABSOLUTA_LOG = os.path.join(os.path.dirname(os.path.abspath(__file__)), "ej
 for handler in logging.root.handlers[:]:
     logging.root.removeHandler(handler)
 
-# LOGS
+# Registro de ejecucion
 logging.basicConfig(
     filename=RUTA_ABSOLUTA_LOG,
     level=logging.INFO,
@@ -40,14 +42,35 @@ class AgenteTienda:
         
         # MODELOS Y FALLBACKS
 
-        modelo_principal = ChatGoogleGenerativeAI(model="gemini-3.5-flash", temperature=0.0)
+        modelo_principal = ChatGroq(
+            model="llama-3.3-70b-versatile", 
+            temperature=0.0
+        )
 
-        respaldo_2_0 = ChatGoogleGenerativeAI(model="gemini-2.0-flash", temperature=0.0)
-        respaldo_1_5 = ChatGoogleGenerativeAI(model="gemini-3.5-flash", temperature=0.0)
+        respaldo_gemini_flash = ChatGoogleGenerativeAI(
+            model="gemini-3.5-flash", 
+            temperature=0.0,
+            max_retries=1
+        )
 
-        self.llm = modelo_principal.with_fallbacks([respaldo_2_0, respaldo_1_5])
+        self.llm = modelo_principal.with_fallbacks([respaldo_gemini_flash])
         
-
+        self.prompt_template = ChatPromptTemplate.from_messages([
+            ("system", (
+                "Eres un asistente virtual de atención al cliente altamente profesional para nuestra Tienda Online.\n"
+                "Tu objetivo es responder de forma amable, clara y precisa a las consultas de los usuarios utilizando ÚNICAMENTE el contexto provisto a continuación.\n\n"
+                "=== CONTEXTO DE CONOCIMIENTO (INVENTARIO Y POLÍTICAS) ===\n"
+                "{contexto}\n"
+                "=========================================================\n\n"
+                "=== REGLAS CRÍTICAS DE VALIDACIÓN ===\n"
+                "1. Solo responde utilizando la información que se encuentra explícitamente en el CONTEXTO.\n"
+                "2. Si la información solicitada no está en el contexto (por ejemplo, si te preguntan por un producto que no está en el inventario o una política que no existe), debes responder exactamente: 'Lo siento, actualmente no tengo esa información disponible en nuestro sistema. ¿Puedo ayudarte con alguna otra consulta sobre nuestro catálogo o políticas actuales?'\n"
+                "3. No inventes precios, características ni unidades de inventario bajo ninguna circunstancia.\n"
+                "4. Responde siempre en español, manteniendo un tono servicial y profesional."
+            )),
+            ("human", "{pregunta}")
+        ])
+    
     def responder_consulta(self, pregunta_usuario):
         try:
 
@@ -68,33 +91,15 @@ class AgenteTienda:
             
             for idx, f in enumerate(fuentes, 1):
                 logging.info(f"FUENTE UTILIZADA [{idx}] en [{f['origen']}]: {f['texto'][:100]}...")
-            prompt_sistema = f"""
-            Eres un asistente virtual de atención al cliente altamente profesional para nuestra Tienda Online.
-            Tu objetivo es responder de forma amable, clara y precisa a las consultas de los usuarios utilizando ÚNICAMENTE el contexto provisto a continuación.
-
-            === CONTEXTO DE CONOCIMIENTO (INVENTARIO Y POLÍTICAS) ===
-            {contexto}
-            =========================================================
-
-            === REGLAS CRÍTICAS DE VALIDACIÓN ===
-            1. Solo responde utilizando la información que se encuentra explícitamente en el CONTEXTO.
-            2. Si la información solicitada no está en el contexto (por ejemplo, si te preguntan por un producto que no está en el inventario o una política que no existe), debes responder exactamente: "Lo siento, actualmente no tengo esa información disponible en nuestro sistema. ¿Puedo ayudarte con alguna otra consulta sobre nuestro catálogo o políticas actuales?"
-            3. No inventes precios, características ni inventarios bajo ninguna circunstancia.
-            4. Responde siempre en español, manteniendo un tono servicial y profesional.
-
-            Pregunta del Cliente: {pregunta_usuario}
-            Respuesta:
-
-
-            """
-
-            respuesta_modelo = self.llm.invoke(prompt_sistema)
             
-            # PARSER
-            
+            mensajes_estructurados = self.prompt_template.format_messages(
+                contexto=contexto,
+                pregunta=pregunta_usuario
+            )
+
+            respuesta_modelo = self.llm.invoke(mensajes_estructurados)
             contenido = respuesta_modelo.content
-
-            respuesta_final= str(contenido)
+            respuesta_final = str(contenido)
 
             if isinstance(contenido, list) and len(contenido) > 0:
                 if isinstance(contenido[0], dict) and 'text' in contenido[0]:
@@ -111,9 +116,7 @@ class AgenteTienda:
                 "respuesta": respuesta_final,
                 "fuentes": fuentes
             }
-            #return str(contenido)    
-            #return respuesta_modelo.content
-        
+ 
         except Exception as e:
             logging.error(f"Error durante el procesamiento de la consulta: {e}")
             return {
