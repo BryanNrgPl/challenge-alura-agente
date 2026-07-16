@@ -1,5 +1,7 @@
 # Asistente Virtual RAG - Tienda Online
 
+> **Prueba la aplicación en vivo aquí:** [Asistente Virtual - Tienda Online](https://alura-agente-challenge.duckdns.org/)
+
 Este proyecto implementa un **Agente de Atención al Cliente Inteligente** basado en la arquitectura RAG (Retrieval-Augmented Generation). El sistema recupera en tiempo real información estructurada de productos (CSV) y políticas internas (TXT) para dar respuestas precisas y libres de alucinaciones.
 
 El agente se encuentra completamente desplegado en producción dentro de **Oracle Cloud Infrastructure (OCI)** con HTTPS activo, logs en tiempo real y almacenamiento de auditoría.
